@@ -47,7 +47,7 @@ function Page() {
     }
 
     this.refreshCurrentSong = function (song, artist) {
-        var currentSong = document.getElementById('title');
+        var currentSong = document.getElementById('song');
         var currentArtist = document.getElementById('album');
 
         if (song !== currentSong.innerHTML) {
@@ -72,7 +72,7 @@ function Page() {
 
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
-            var coverArt = document.getElementById('albumArt');
+            var coverArt = document.getElementById('thumbnail_uri');
 
             // Get cover art URL
             if (this.readyState === 4 && this.status === 200) {
@@ -102,7 +102,7 @@ function Page() {
                 }
             }
         }
-        xhttp.open('GET', 'https://api.radioking.io/widget/radio/' + RADIO_ID + '/track/current', true);
+        xhttp.open('GET', 'https://api.kexp.org/v2/plays/?limit=1', true);
         xhttp.send();
     }
 }
@@ -151,14 +151,14 @@ function getStreamingData() {
 
             var page = new Page();
 
-            var currentSongElement = document.getElementById('title').innerHTML.replace(/&apos;/g, '\'');
+            var currentSongElement = document.getElementById('song').innerHTML.replace(/&apos;/g, '\'');
             let currentSongEl = currentSongElement.replace(/&amp;/g, '&');
 
             // Formating characters to UTF-8
-            let song = (data.title ?? "").replace(/&apos;/g, '\'');
+            let song = (data.results.song ?? "").replace(/&apos;/g, '\'');
             let currentSong = song.replace(/&amp;/g, '&');
 
-            let artist = (data.artist ?? "").replace(/&apos;/g, '\'');
+            let artist = (data.results.artist ?? "").replace(/&apos;/g, '\'');
             let currentArtist = artist.replace(/&amp;/g, '&');
             currentArtist = currentArtist.replace('  ', ' ');
 
@@ -175,7 +175,7 @@ function getStreamingData() {
     //var d = new Date();
 
     // Requisition with timestamp to prevent cache on mobile devices
-    xhttp.open('GET', 'https://api.radioking.io/widget/radio/' + RADIO_ID + '/track/current', true);
+    xhttp.open('GET', 'https://api.kexp.org/v2/plays/?limit=1', true);
     xhttp.send();
 }
 
